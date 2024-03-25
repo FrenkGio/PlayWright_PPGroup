@@ -36,7 +36,7 @@ myTest("Filter selection of supplier in Inbox", async ({ pageP2P }) => {
 
     await pageP2P.click(navigationBarSelectors.inbox)
     await pageP2P.locator(genericFilters.capTableFilters.capTable).getByText("supplier").click()
-    supplierName = "De Energie consultant"
+    supplierName = "FIDAL"
     await pageP2P.locator(genericFilters.dropdownField.DropdownSearchEntryField).fill(supplierName, { delay: 500 })
     selectedSupplier = await pageP2P.locator(genericFilters.dropdownField.filterSelection(supplierName))
     selectedSupplier.click()
@@ -44,7 +44,7 @@ myTest("Filter selection of supplier in Inbox", async ({ pageP2P }) => {
     await pageP2P.locator(genericFilters.dropdownField.applyFilter).click()
     await basePage.waitForFirstRowToLoad()
     dataTableRowText = await basePage.getTableFirstRowText("supplier")
-    await expect(dataTableRowText).toContain("De Energie consultant")
+    await expect(dataTableRowText).toContain("FIDAL")
 })
 
 myTest("Filter selection of companies in Invoice history", async ({ pageP2P }) => {
@@ -107,7 +107,7 @@ myTest("Filter selection of company and status in Contracts", async ({ pageP2P }
 
 myTest("Search for an invoice through search field", async ({ pageP2P }) => {
     const basePage = new BasePage(pageP2P)
-    const invoiceNo = "I2312397"
+    const invoiceNo = "2201641"
     companyName = " SMARTQA-TEST "
 
     await pageP2P.locator("nav .search input[placeholder='Search...']").fill(invoiceNo, { delay: 500 })
@@ -120,7 +120,7 @@ myTest("Search for an invoice through search field", async ({ pageP2P }) => {
     await expect(dataTableRowText).toContain(invoiceNo)
 })
 
-myTest("User navigates to the settings page trough the menu-icon", async ({ pageP2P }) => {
+myTest("User navigates to the settings page adjusts a company's profile", async ({ pageP2P }) => {
     const basePage = new BasePage(pageP2P)
     companyName = "SMARTQA-TEST"
     menuItem = "Settings"
@@ -135,6 +135,29 @@ myTest("User navigates to the settings page trough the menu-icon", async ({ page
     await basePage.waitForFirstRowToLoad()
     dataTableRowText = await basePage.getTableFirstRowText("name")
     await expect(dataTableRowText).toContain(companyName)
+    await pageP2P.locator(".fa-pencil-alt").click()
+    const h1Headlinelocator = pageP2P.locator("h1.headline__title")
+    await expect(h1Headlinelocator).toContainText(companyName)
+
+    const isActiveSlider = await pageP2P.locator("cap-input-switch p-inputswitch")
+    await pageP2P.waitForTimeout(1500)
+    await isActiveSlider.waitFor()
+    await expect(await pageP2P.locator("cap-input-switch p-inputswitch div").first()).toHaveClass(/p-inputswitch-checked/)
+    await isActiveSlider.click()
+    await isActiveSlider.waitFor()
+    await expect(await pageP2P.locator("cap-input-switch p-inputswitch div").first()).not.toHaveClass(/p-inputswitch-checked/)
+    await isActiveSlider.click()
+    await isActiveSlider.waitFor()
+    await expect(await pageP2P.locator("cap-input-switch p-inputswitch div").first()).toHaveClass(/p-inputswitch-checked/)
+    await isActiveSlider.waitFor()
+    await pageP2P.getByText("Individual final approver settings").click()
+    await pageP2P.getByText("Add condition").first().click()
+    await pageP2P.locator("div[formarrayname='companyFinalApproverConditions'] span.p-dropdown-label").click()
+    await pageP2P.locator("li[aria-label='supplier']").click()
+    await pageP2P.locator("cap-dropdown[formcontrolname='operator_class'] p-dropdown.p-element").click()
+    await pageP2P.locator("li[aria-label='Equals']").waitFor()
+    await pageP2P.locator("li[aria-label='Equals']").click()
+    await pageP2P.waitForTimeout(2000)
 })
 
 myTest("User navigates to the settings page and adjusts a user's profile ", async ({ pageP2P }) => {
@@ -215,8 +238,8 @@ myTest("User navigates to the settings page and adjusts a permission for a role 
     await expect(pageP2P.locator("p-toastitem.p-element")).toBeVisible()
     const closeButtonToaster = await pageP2P.locator("button[aria-label='Close']")
 
-    await closeButtonToaster.waitFor()
     await expect(closeButtonToaster).toBeVisible()
+    // await closeButtonToaster.waitFor()
     await closeButtonToaster.click()
     await pageP2P.getByText("Back to overview").click()
 })
