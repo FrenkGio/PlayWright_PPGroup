@@ -16,7 +16,7 @@ myTest("Cost split an invoice", async ({ pageP2P }) => {
     await pageP2P.locator(genericFilters.capTableFilters.capTable).waitFor("visible")
     await basePage.waitForFirstRowToLoad()
     await pageP2P.locator(genericFilters.capTableFilters.capTable).getByText("company").click()
-    companyName = "520-TRAD BC14-TEST"
+    companyName = "SMARTQA-TEST"
     selectedCompany = await pageP2P.locator(genericFilters.dropdownField.filterSelection(companyName))
     await selectedCompany.click()
     await expect(selectedCompany).toHaveClass(genericFilters.dropdownField.multiselectItemChecked)
@@ -76,7 +76,7 @@ myTest("Cost split an invoice", async ({ pageP2P }) => {
 
     await pageP2P.getByText("Select workflow").click()
     await pageP2P.locator(".col.content-left.pr-5 .p-dropdown-trigger").click()
-    let workflow = "testingSmartWorkflow (v6) (Approval)"
+    let workflow = "SmartQA (v2) (Approval)"
     await pageP2P.locator(".p-dropdown-header input[type='text']").fill(workflow, { delay: 1000 })
     let selectedWorkflow = await pageP2P.locator(invoiceWorkflow.costSplitting.filterSelection(workflow))
     await selectedWorkflow.waitFor()
@@ -114,15 +114,15 @@ myTest("Cost split an invoice", async ({ pageP2P }) => {
 
     // // gaan naar de inbox
 
-    // await pageP2P.waitForURL("https://p2p.acceptatie.pp-group.eu/#/admin/invoices/inbox")
-    // // verwacht toast element en click het weg
-    // await toasterElement.waitFor()
-    // await expect(toasterElement).toBeVisible()
-    // await pageP2P.locator("button[aria-label='Close']").click()
-    // const uploadButton = await pageP2P.locator("cap-button[icon='fas fa-file-upload']")
-    // await uploadButton.waitFor()
-    // const filters = await pageP2P.locator(genericFilters.capTableFilters.capTable)
-    // await filters.waitFor()
+    await pageP2P.waitForURL("https://p2p.acceptatie.pp-group.eu/#/admin/invoices/inbox")
+    // verwacht toast element en click het weg
+    await toasterElement.waitFor()
+    await expect(toasterElement).toBeVisible()
+    await pageP2P.locator("button[aria-label='Close']").click()
+    const uploadButton = await pageP2P.locator("cap-button[icon='fas fa-file-upload']")
+    await uploadButton.waitFor()
+    const filters = await pageP2P.locator(genericFilters.capTableFilters.capTable)
+    await filters.waitFor()
 
     // hier nog meer ellende --->
 
